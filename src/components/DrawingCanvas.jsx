@@ -1,14 +1,17 @@
-import React, { useRef, useEffect } from "react";
-const DrawingCanvas = ({
-  image,
-  setSavedGallery,
-  imgIdx,
-  savedGallery,
-  setIsCanvasActive,
-}) => {
-  const canvasRef = useRef(null);
-  let isDrawing = false;
+import React, { useState, useRef, useEffect, useContext } from "react";
+import ImageContext from "../contexts/ImageContext";
+
+const DrawingCanvas = ({ image }) => {
   let context = null;
+
+  const { savedGallery, setSavedGallery, imageIndex, setIsCanvasActive } =
+    useContext(ImageContext);
+
+  const canvasRef = useRef(null);
+  const [canvasLineWidth, setCanvasLineWidth] = useState(1);
+  const [canvasLineColor, setCanvasLineColor] = useState("#ffff");
+  let isDrawing = false;
+
   const drawingData = []; // Store drawing data
 
   useEffect(() => {
@@ -38,15 +41,22 @@ const DrawingCanvas = ({
     redrawImage();
     window.addEventListener("resize", resizeCanvas);
   }, [image]);
+
   const startDrawing = (e) => {
+    context = canvasRef.current.getContext("2d");
     isDrawing = true;
-    context.strokeStyle = "rgb(0, 0, 255)";
-    context.lineWidth = 10;
+    context.strokeStyle = canvasLineColor;
+
+    console.log(canvasLineColor);
+    context.lineWidth = canvasLineWidth;
     context.beginPath();
     context.moveTo(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
   };
   const continueDrawing = (e) => {
+    context = canvasRef.current.getContext("2d");
+
     if (!isDrawing) return;
+
     context.lineTo(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
     context.stroke();
   };
@@ -57,12 +67,33 @@ const DrawingCanvas = ({
     const canvas = canvasRef.current;
     const dataUrl = canvas.toDataURL();
     const updateEditingImg = [...savedGallery];
-    updateEditingImg[imgIdx] = dataUrl;
+    updateEditingImg[imageIndex] = dataUrl;
     setSavedGallery(updateEditingImg);
     setIsCanvasActive(false);
   };
   return (
     <div className=" flex flex-col justify-center items-center">
+      <input
+        type="color"
+        id="color"
+        value={canvasLineColor}
+        onChange={(e) => {
+          setCanvasLineColor(e.target.value);
+          console.log(e.target.value);
+        }}
+      />
+
+      <input
+        type="number"
+        min={1}
+        value={canvasLineWidth}
+        max={20}
+        onChange={(e) => {
+          setCanvasLineWidth(parseInt(e.target.value));
+          // console.log(typeof e.target.value);
+        }}
+        className=" p-2 bg-blue-400 text-white font-bold text-2xl text-center"
+      />
       <canvas
         key={image}
         className="aspect-auto w-[500px] h-[500px] "
