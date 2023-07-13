@@ -1,4 +1,5 @@
-import React, { useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
+let context = null;
 const DrawingCanvas = ({
   image,
   setSavedGallery,
@@ -7,9 +8,14 @@ const DrawingCanvas = ({
   setIsCanvasActive,
 }) => {
   const canvasRef = useRef(null);
+  const [canvasLineWidth, setCanvasLineWidth] = useState(1);
   let isDrawing = false;
-  let context = null;
+
   const drawingData = []; // Store drawing data
+
+  // useEffect(() => {
+  //   context.lineWidth = canvasLineWidth;
+  // }, [canvasLineWidth]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -38,15 +44,24 @@ const DrawingCanvas = ({
     redrawImage();
     window.addEventListener("resize", resizeCanvas);
   }, [image]);
+
   const startDrawing = (e) => {
+    const context = canvasRef.current.getContext("2d");
     isDrawing = true;
     context.strokeStyle = "rgb(0, 0, 255)";
-    context.lineWidth = 10;
+    console.log(canvasLineWidth);
+    context.lineWidth = canvasLineWidth;
     context.beginPath();
     context.moveTo(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
   };
   const continueDrawing = (e) => {
+    const context = canvasRef.current.getContext("2d");
+
     if (!isDrawing) return;
+
+    console.log(canvasLineWidth);
+    context.lineWidth = canvasLineWidth;
+
     context.lineTo(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
     context.stroke();
   };
@@ -63,6 +78,17 @@ const DrawingCanvas = ({
   };
   return (
     <div className=" flex flex-col justify-center items-center">
+      <input
+        type="number"
+        min={1}
+        value={canvasLineWidth}
+        max={20}
+        onChange={(e) => {
+          setCanvasLineWidth(parseInt(e.target.value));
+          // console.log(typeof e.target.value);
+        }}
+        className=" p-2 bg-blue-400 text-white font-bold text-2xl text-center"
+      />
       <canvas
         key={image}
         className="aspect-auto w-[500px] h-[500px] "

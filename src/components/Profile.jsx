@@ -24,6 +24,7 @@ function Profile() {
   useEffect(() => {
     // console.log(savedGallery);
   }, [savedGallery]);
+
   const handleRetake = () => {
     setPicture(""); // Reset the picture state to an empty string
     setIsCanvasActive(false);
