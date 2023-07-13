@@ -90,15 +90,12 @@ const DrawingCanvas = ({ image }) => {
         max={20}
         onChange={(e) => {
           setCanvasLineWidth(parseInt(e.target.value));
-          // console.log(typeof e.target.value);
         }}
         className=" p-2 bg-blue-400 text-white font-bold text-2xl text-center"
       />
       <canvas
         key={image}
         className="aspect-auto w-[500px] h-[500px] "
-        // height={500}
-        // width={500}
         ref={canvasRef}
         onMouseDown={startDrawing}
         onMouseMove={continueDrawing}
@@ -108,10 +105,6 @@ const DrawingCanvas = ({ image }) => {
       <button className="bg-blue-400 px-4 py-2 m-4" onClick={saveCanvasImage}>
         Save Image
       </button>
-
-      {/* <button onClick={handleRetake} className="bg-blue-400 px-4 py-2 m-4 ">
-        Retake
-      </button> */}
     </div>
   );
 };
