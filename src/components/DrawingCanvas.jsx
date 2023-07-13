@@ -1,21 +1,18 @@
-import React, { useState, useRef, useEffect } from "react";
-let context = null;
-const DrawingCanvas = ({
-  image,
-  setSavedGallery,
-  imgIdx,
-  savedGallery,
-  setIsCanvasActive,
-}) => {
+import React, { useState, useRef, useEffect, useContext } from "react";
+import ImageContext from "../contexts/ImageContext";
+
+const DrawingCanvas = ({ image }) => {
+  let context = null;
+
+  const { savedGallery, setSavedGallery, imageIndex, setIsCanvasActive } =
+    useContext(ImageContext);
+
   const canvasRef = useRef(null);
   const [canvasLineWidth, setCanvasLineWidth] = useState(1);
+  const [canvasLineColor, setCanvasLineColor] = useState("#ffff");
   let isDrawing = false;
 
   const drawingData = []; // Store drawing data
-
-  // useEffect(() => {
-  //   context.lineWidth = canvasLineWidth;
-  // }, [canvasLineWidth]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -46,21 +43,19 @@ const DrawingCanvas = ({
   }, [image]);
 
   const startDrawing = (e) => {
-    const context = canvasRef.current.getContext("2d");
+    context = canvasRef.current.getContext("2d");
     isDrawing = true;
-    context.strokeStyle = "rgb(0, 0, 255)";
-    console.log(canvasLineWidth);
+    context.strokeStyle = canvasLineColor;
+
+    console.log(canvasLineColor);
     context.lineWidth = canvasLineWidth;
     context.beginPath();
     context.moveTo(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
   };
   const continueDrawing = (e) => {
-    const context = canvasRef.current.getContext("2d");
+    context = canvasRef.current.getContext("2d");
 
     if (!isDrawing) return;
-
-    console.log(canvasLineWidth);
-    context.lineWidth = canvasLineWidth;
 
     context.lineTo(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
     context.stroke();
@@ -72,12 +67,22 @@ const DrawingCanvas = ({
     const canvas = canvasRef.current;
     const dataUrl = canvas.toDataURL();
     const updateEditingImg = [...savedGallery];
-    updateEditingImg[imgIdx] = dataUrl;
+    updateEditingImg[imageIndex] = dataUrl;
     setSavedGallery(updateEditingImg);
     setIsCanvasActive(false);
   };
   return (
     <div className=" flex flex-col justify-center items-center">
+      <input
+        type="color"
+        id="color"
+        value={canvasLineColor}
+        onChange={(e) => {
+          setCanvasLineColor(e.target.value);
+          console.log(e.target.value);
+        }}
+      />
+
       <input
         type="number"
         min={1}

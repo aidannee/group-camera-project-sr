@@ -1,6 +1,9 @@
+import { useContext } from "react";
 import React, { useEffect, useState } from "react";
 import Webcam from "react-webcam";
 import DrawingCanvas from "./DrawingCanvas";
+import ImageContext from "../contexts/ImageContext";
+
 const WebcamComponent = () => <Webcam />;
 const videoConstraints = {
   width: 400,
@@ -8,12 +11,20 @@ const videoConstraints = {
   facingMode: "user",
 };
 function Profile() {
+  const {
+    savedGallery,
+    setSavedGallery,
+    imageIndex,
+    setImageIndex,
+    isCanvasActive,
+    setIsCanvasActive,
+  } = useContext(ImageContext);
   const [picture, setPicture] = useState("");
   const webcamRef = React.useRef(null);
   // galery of images
-  let [savedGallery, setSavedGallery] = useState([]);
-  let [imageIndex, setImageIndex] = useState(-1);
-  let [isCanvasActive, setIsCanvasActive] = useState(false);
+  // let [savedGallery, setSavedGallery] = useState([]);
+  // let [imageIndex, setImageIndex] = useState(-1);
+  // let [isCanvasActive, setIsCanvasActive] = useState(false);
   const capture = React.useCallback(() => {
     const pictureSrc = webcamRef.current.getScreenshot();
     setPicture(pictureSrc);
