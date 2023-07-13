@@ -21,10 +21,7 @@ function Profile() {
   } = useContext(ImageContext);
   const [picture, setPicture] = useState("");
   const webcamRef = React.useRef(null);
-  // galery of images
-  // let [savedGallery, setSavedGallery] = useState([]);
-  // let [imageIndex, setImageIndex] = useState(-1);
-  // let [isCanvasActive, setIsCanvasActive] = useState(false);
+
   const capture = React.useCallback(() => {
     const pictureSrc = webcamRef.current.getScreenshot();
     setPicture(pictureSrc);
@@ -32,9 +29,7 @@ function Profile() {
   useEffect(() => {
     if (picture != "") setSavedGallery([...savedGallery, picture]);
   }, [picture]);
-  useEffect(() => {
-    // console.log(savedGallery);
-  }, [savedGallery]);
+  useEffect(() => {}, [savedGallery]);
 
   const handleRetake = () => {
     setPicture(""); // Reset the picture state to an empty string
@@ -47,9 +42,8 @@ function Profile() {
     setIsCanvasActive(true);
     setImageIndex(idx);
     console.log(savedGallery[idx]);
-    // console.log(savedGallery);
   }
-  // function saveChanges(currentImage) {}
+
   return (
     <>
       <div className=" overflow-hidden h-screen flex flex-col ">
@@ -57,9 +51,7 @@ function Profile() {
           Hello World
         </h1>
         <div className="flex  h-[calc(100vh-60px)]">
-          {/* Left part content */}
           <div className="w-[25%] bg-red-500 p-4  overflow-y-auto  h-full">
-            {/* Place your content here */}
             {savedGallery.map((img, index) => {
               return (
                 <div key={index}>
@@ -99,7 +91,7 @@ function Profile() {
               );
             })}
           </div>
-          {/* Right part content */}
+
           <div className=" w-[75%] bg-green-500 p-4 overflow-y-auto  ">
             <div className=" z-20">
               {isCanvasActive ? (
@@ -112,8 +104,6 @@ function Profile() {
                 />
               ) : (
                 <div className="flex flex-col ">
-                  {/* Right part content */}
-                  {/* Place your content here */}
                   {picture === "" ? (
                     <div className="flex  flex-col  items-center">
                       <div className="flex justify-center  ">
@@ -139,23 +129,6 @@ function Profile() {
                       Retake
                     </button>
                   )}
-                  {/* <div>
-                {picture !== "" ? (
-                  <button
-                    onClick={handleRetake}
-                    className="bg-blue-400 px-4 py-2 m-4 "
-                  >
-                    Retake
-                  </button>
-                ) : (
-                  <button
-                    onClick={capture}
-                    className="bg-red-400 px-4 py-2 m-4 "
-                  >
-                    Capture
-                  </button>
-                )}
-              </div> */}
                 </div>
               )}
             </div>

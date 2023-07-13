@@ -6,8 +6,6 @@ import { ImageContextProvider } from "./contexts/ImageContext.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <ImageContextProvider>
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
+    <App />
   </ImageContextProvider>
 );
