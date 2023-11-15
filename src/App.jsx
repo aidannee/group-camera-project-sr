@@ -1,8 +1,13 @@
 import Profile from "./components/Profile";
+import "./App.css";
+
 function App() {
   return (
     <>
-      <Profile />
+      <div className="h-screen w-screen">
+        {" "}
+        <Profile />
+      </div>
     </>
   );
 }

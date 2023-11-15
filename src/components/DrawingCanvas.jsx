@@ -72,47 +72,60 @@ const DrawingCanvas = ({ image }) => {
     setIsCanvasActive(false);
   };
   return (
-    <div className=" flex flex-col justify-center items-center">
-      <input
-        type="color"
-        id="color"
-        value={canvasLineColor}
-        onChange={(e) => {
-          setCanvasLineColor(e.target.value);
-          console.log(e.target.value);
-        }}
-      />
+    <>
+      {" "}
+      <div className="flex flex-col justify-center items-center ">
+        {" "}
+        <canvas
+          key={image}
+          className="aspect-auto bg-gray-200 "
+          height={500}
+          width={500}
+          ref={canvasRef}
+          onMouseDown={startDrawing}
+          onMouseMove={continueDrawing}
+          onMouseUp={stopDrawing}
+          onMouseOut={stopDrawing}
+        />
+        <div
+          className=" p-1 flex items-center space-x-6 bg-purple-400"
+          id="canvasEditorButtons"
+        >
+          <div className="flex items-center p-1 bg-rose-400">
+            <label htmlFor="color">Colour:</label>
+            <input
+              className=" bg-transparent"
+              type="color"
+              id="color"
+              value={canvasLineColor}
+              onChange={(e) => {
+                setCanvasLineColor(e.target.value);
+                console.log(e.target.value);
+              }}
+            />
+          </div>
 
-      <input
-        type="number"
-        min={1}
-        value={canvasLineWidth}
-        max={20}
-        onChange={(e) => {
-          setCanvasLineWidth(parseInt(e.target.value));
-          // console.log(typeof e.target.value);
-        }}
-        className=" p-2 bg-blue-400 text-white font-bold text-2xl text-center"
-      />
-      <canvas
-        key={image}
-        className="aspect-auto w-[500px] h-[500px] "
-        // height={500}
-        // width={500}
-        ref={canvasRef}
-        onMouseDown={startDrawing}
-        onMouseMove={continueDrawing}
-        onMouseUp={stopDrawing}
-        onMouseOut={stopDrawing}
-      />
-      <button className="bg-blue-400 px-4 py-2 m-4" onClick={saveCanvasImage}>
-        Save Image
-      </button>
-
-      {/* <button onClick={handleRetake} className="bg-blue-400 px-4 py-2 m-4 ">
-        Retake
-      </button> */}
-    </div>
+          <div className="p-1 bg-blue-400">
+            <label htmlFor="lineWidth">Line width(1-20):</label>
+            <input
+              id="lineWidth"
+              type="number"
+              min={1}
+              value={canvasLineWidth}
+              max={20}
+              onChange={(e) => {
+                setCanvasLineWidth(parseInt(e.target.value));
+                // console.log(typeof e.target.value);
+              }}
+              className=""
+            />
+          </div>
+          <button className=" p-1 bg-slate-400 " onClick={saveCanvasImage}>
+            Save Image
+          </button>
+        </div>
+      </div>
+    </>
   );
 };
 export default DrawingCanvas;
